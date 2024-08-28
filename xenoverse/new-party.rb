@@ -1,30 +1,30 @@
 class PokemonScreen
-  def pbPokemonDebug(pkmn,pkmnid)
+	def pbPokemonDebug(pkmn,pkmnid)
 		viewport=Viewport.new(286,0,Graphics.width,Graphics.height)
 		viewport.z=99999
 		sprites={}
 		commands=CommandList.new
-		#commands.add("hpstatus",_INTL("HP/Status"))
-		#commands.add("level",_INTL("Level"))
-		#commands.add("species",_INTL("Species"))
-		#commands.add("moves",_INTL("Moves"))
+		commands.add("hpstatus",_INTL("HP/Status"))
+		commands.add("level",_INTL("Level"))
+		commands.add("species",_INTL("Species"))
+		commands.add("moves",_INTL("Moves"))
 		commands.add("gender",_INTL("Gender"))
 		commands.add("ability",_INTL("Ability"))
 		commands.add("nature",_INTL("Nature"))
 		commands.add("shininess",_INTL("Shininess"))
 		commands.add("form",_INTL("Form"))
-		#commands.add("happiness",_INTL("Happiness"))
+		commands.add("happiness",_INTL("Happiness"))
 		commands.add("evivpid",_INTL("EV/IV/pID"))
-		#commands.add("pokerus",_INTL("Pokérus"))
+		commands.add("pokerus",_INTL("Pokérus"))
 		commands.add("ownership",_INTL("Ownership"))
 		commands.add("nickname",_INTL("Nickname"))
 		commands.add("pokeball",_INTL("Poké Ball"))
-		#commands.add("ribbons",_INTL("Ribbons"))
-		#commands.add("egg",_INTL("Egg"))
-		#commands.add("shadowpokemon",_INTL("Shadow Pokémon"))
-		#commands.add("mysterygift",_INTL("Make Mystery Gift"))
-		#commands.add("duplicate",_INTL("Duplicate"))
-		#commands.add("delete",_INTL("Delete"))
+		commands.add("ribbons",_INTL("Ribbons"))
+		commands.add("egg",_INTL("Egg"))
+		commands.add("shadowpokemon",_INTL("Shadow Pokémon"))
+		commands.add("mysterygift",_INTL("Make Mystery Gift"))
+		commands.add("duplicate",_INTL("Duplicate"))
+		commands.add("delete",_INTL("Delete"))
 		sprites["cmdwindow"]=Window_CommandPokemonEx.new(commands.list)
 		cmdwindow=sprites["cmdwindow"]
 		cmdwindow.viewport=viewport
@@ -91,7 +91,7 @@ class PokemonScreen
 		end
 		cmdwindow.visible=false
 	end
-		
+
 	def hpstatus(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -151,7 +151,7 @@ class PokemonScreen
 			end
 		end
 	end
-		
+
 	def level(pkmn,pkmnid)
 		params=ChooseNumberParams.new
 		params.setRange(1,PBExperience::MAXLEVEL)
@@ -165,7 +165,7 @@ class PokemonScreen
 			pbRefreshSingle(pkmnid)
 		end
 	end
-		
+
 	def species(pkmn, pkmnid)
 		if pbNewSelectStyle
 			species = pbChoosePokemonID
@@ -183,7 +183,7 @@ class PokemonScreen
 			pbRefreshSingle(pkmnid)
 		end
 	end
-		
+
 	def moves(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -228,7 +228,7 @@ class PokemonScreen
 			end
 		end
 	end
-		
+
 	def gender(pkmn,pkmnid)
 		if pkmn.gender==2
 			Kernel.pbMessage(_INTL("{1} is genderless.",pkmn.name))
@@ -271,7 +271,7 @@ class PokemonScreen
 			end
 		end
 	end
-		
+
 	def ability(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -298,7 +298,7 @@ class PokemonScreen
 			pbRefreshSingle(pkmnid)
 		end
 	end
-		
+
 	def nature(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -325,7 +325,7 @@ class PokemonScreen
 			pbRefreshSingle(pkmnid)
 		end
 	end
-		
+
 	def shininess(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -352,7 +352,7 @@ class PokemonScreen
 			pbRefreshSingle(pkmnid)
 		end
 	end
-		
+
 	def form(pkmn,pkmnid)
 		params=ChooseNumberParams.new
 		params.setRange(0,100)
@@ -366,7 +366,7 @@ class PokemonScreen
 			pbRefreshSingle(pkmnid)
 		end
 	end
-		
+
 	def happiness(pkmn,pkmnid)
 		params=ChooseNumberParams.new
 		params.setRange(0,255)
@@ -379,7 +379,7 @@ class PokemonScreen
 			pbRefreshSingle(pkmnid)
 		end
 	end
-		
+
 	def evivpid(pkmn,pkmnid)
 		stats=[_INTL("HP"),_INTL("Attack"),_INTL("Defense"),_INTL("Speed"),_INTL("Sp. Attack"),_INTL("Sp. Defense")]
 		cmd=0
@@ -463,7 +463,7 @@ class PokemonScreen
 			end
 		end
 	end
-		
+
 	def pokerus(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -492,8 +492,7 @@ class PokemonScreen
 			end
 		end
 	end
-		
-		
+
 	def ownership(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -539,7 +538,7 @@ class PokemonScreen
 			end
 		end
 	end
-		
+
 	def nickname(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -563,7 +562,7 @@ class PokemonScreen
 			end
 		end
 	end
-		
+
 	def pokeball(pkmn,pkmnid)
 		cmd=0
 		loop do
@@ -590,7 +589,7 @@ class PokemonScreen
 			end
 		end
 		end
-		
+
 		def ribbons(pkmn,pkmnid)
 		cmd=0
 		loop do
