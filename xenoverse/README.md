@@ -1,6 +1,6 @@
 # Pokemon Xenoverse
 
-Contains a [Python script](main.py) for converting Pokemon Xenoverse's Ruby scripts and its binary Scripts.xvd back and forth, based on https://github.com/godmodemaker/xenoscr-comdecom.
+Contains a [Python script](main.py) for converting Pokemon Xenoverse's Ruby scripts and its compiled `Scripts.xvd` back and forth, based on https://github.com/godmodemaker/xenoscr-comdecom.
 
 ```sh
 # Install dependencies.
