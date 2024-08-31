@@ -1,0 +1,7 @@
+[submodule "uranium/rgssad"]
+	path = uranium/rgssad
+	url = https://github.com/luxrck/rgssad
+
+[submodule "uranium/unpackd"]
+	path = uranium/unpackd
+	url = https://github.com/ra101/Essentials-Unpackd
