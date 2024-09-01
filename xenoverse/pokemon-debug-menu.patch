@@ -1,8 +1,8 @@
 diff --git a/222_NewParty.rb b/222_NewParty.rb
-index dfcf8fe..73a3349 100644
+index dfcf8fe..ab1192a 100644
 --- a/222_NewParty.rb
 +++ b/222_NewParty.rb
-@@ -1262,8 +1262,715 @@ class PokemonScreen
+@@ -1262,8 +1262,717 @@ class PokemonScreen
  		return nil
  	end  
  	
@@ -46,17 +46,17 @@ index dfcf8fe..73a3349 100644
 +		cmd = -1
 +		loop do
 +			loop do
-+			cmdwindow.update
-+			Graphics.update
-+			Input.update
-+			if Input.trigger?(Input::B)
-+				cmd = -1
-+				break
-+			end
-+			if Input.trigger?(Input::C)
-+				cmd = cmdwindow.index
-+				break
-+			end
++				cmdwindow.update
++				Graphics.update
++				Input.update
++				if Input.trigger?(Input::B)
++					cmd = -1
++					break
++				end
++				if Input.trigger?(Input::C)
++					cmd = cmdwindow.index
++					break
++				end
 +			end
 +			break if cmd == -1
 +      cmdwindow.visible = false
@@ -71,32 +71,34 @@ index dfcf8fe..73a3349 100644
 +      elsif cmd == 4
 +			  gender(pkmn, pkmnid)
 +      elsif cmd == 5
-+			  nature(pkmn, pkmnid)
++			  ability(pkmn, pkmnid)
 +      elsif cmd == 6
-+			  shininess(pkmn, pkmnid)
++			  nature(pkmn, pkmnid)
 +      elsif cmd == 7
-+			  form(pkmn, pkmnid)
++			  shininess(pkmn, pkmnid)
 +      elsif cmd == 8
-+			  happiness(pkmn, pkmnid)
++			  form(pkmn, pkmnid)
 +      elsif cmd == 9
-+			  evivpid(pkmn, pkmnid)
++			  happiness(pkmn, pkmnid)
 +      elsif cmd == 10
-+			  pokerus(pkmn, pkmnid)
++			  evivpid(pkmn, pkmnid)
 +      elsif cmd == 11
-+			  ownership(pkmn, pkmnid)
++			  pokerus(pkmn, pkmnid)
 +      elsif cmd == 12
-+			  nickname(pkmn, pkmnid)
++			  ownership(pkmn, pkmnid)
 +      elsif cmd == 13
-+			  pokeball(pkmn, pkmnid)
++			  nickname(pkmn, pkmnid)
 +      elsif cmd == 14
-+			  ribbons(pkmn, pkmnid)
++			  pokeball(pkmn, pkmnid)
 +      elsif cmd == 15
-+			  egg(pkmn, pkmnid)
++			  ribbons(pkmn, pkmnid)
 +      elsif cmd == 16
-+			  shadowpokemon(pkmn, pkmnid)
++			  egg(pkmn, pkmnid)
 +      elsif cmd == 17
-+			  duplicate(pkmn, pkmnid)
++			  shadowpokemon(pkmn, pkmnid)
 +      elsif cmd == 18
++			  duplicate(pkmn, pkmnid)
++      elsif cmd == 19
 +			  delete(pkmn, pkmnid)
 +			end
 +      cmdwindow.visible = true
