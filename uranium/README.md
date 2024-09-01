@@ -2,7 +2,7 @@
 
 Pokemon Uranium obfuscates its Ruby scripts by placing them in `Scripts.rxdata` which is then placed in `Uranium.rgssad`. The latter can be decompiled with:
 
-Contains a [Rust CLI](rgssad) for packing and unpacking `Uranium.rgssad` and a [Ruby CLI](unpackd) for extracting and combining `Scripts.rxdata` with a patch to modify it slgithly for Pokemon Uranium. To use them, install [`cargo`](https://doc.rust-lang.org/cargo/getting-started/installation.html), and [`gem`](https://www.ruby-lang.org/en/documentation/installation/), respectively.
+Contains a [Rust CLI](rgssad) for packing and unpacking `Uranium.rgssad` and a [Ruby CLI](unpackd) for extracting and combining `Scripts.rxdata`. To use them, install [`cargo`](https://doc.rust-lang.org/cargo/getting-started/installation.html), and [`gem`](https://www.ruby-lang.org/en/documentation/installation/), respectively.
 
 ```sh
 # Extract scripts from Uranium.rgssad
