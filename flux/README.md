@@ -2,7 +2,16 @@
 
 Pokemon Flux obfuscates its Ruby scripts by placing them in `.fpk` files which are actually just `.zip` files. Extract them as `.zip`s using your favorite tool, edit them as desired, zip them back up and replace the original `.fpk` with the resulting `.zip`.
 
-Contains reference Ruby files ([1](debug-menus.rb), [2](pokemon-party.rb)) for implementing a Pokemon debug menu.
+```sh
+# Extract scripts from Source/Main/A_0.fpk
+make decompile POKEMON_FLUX=path/to/pokemon/flux
+# Edit the extract scripts as desired, then compile them back to Source/Main/A_0.fpk
+make compile POKEMON_FLUX=path/to/pokemon/flux
+```
 
-Omits the `###_DebugMenus.rb`/`###_PokemonParty.rb` naming scheme of the Pokemon Flux scripts and the rest of the code in that file as those things are liable to change independently. To use this reference, "merge" the class defined in it with the same class defined in the Pokemon Flux scripts e.g. `###_DebugMenus.rb`, with the reference taking priority if both define the same function.
+Contains a [patch](pokemon-debug-menu.patch) for implementing a debug menu in Pokemon Flux to allow editing of a Pokemon's Nature, EVs and IVs to avoid senseless breeding/resetting grind.
+
+```sh
+make decompile pokemon-debug-menu compile POKEMON_FLUX=path/to/pokemon/flux
+```
 
