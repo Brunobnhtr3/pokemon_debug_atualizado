@@ -1,6 +1,6 @@
 # Pokemon Flux
 
-Pokemon Flux obfuscates its Ruby scripts by placing them in `.fpk` files which are some extractable and compressable with [7-Zip](https://www.7-zip.org/). Extract them, edit them as desired, re-compress them, and replace the original `.fpk` with the resulting `.zip`.
+Pokemon Flux obfuscates its Ruby scripts by placing them in `.fpk` files which are somehow extractable and compressable with [7-Zip](https://www.7-zip.org/). Extract them, edit them as desired, re-compress them, and replace the original `.fpk` with the resulting `.zip`.
 
 Contains a script that uses `7za`, a 7-Zip CLI, to zip and unzip `A_0.fpk`. To use it, install `7za`.
 
