@@ -11,10 +11,19 @@ index 193272b..dda927b 100644
 +  end
 +end
 diff --git a/113_&as;PScreen_Party.rb b/113_&as;PScreen_Party.rb
-index fc6a5e3..de161c6 100644
+index fc6a5e3..263545b 100644
 --- a/113_&as;PScreen_Party.rb
 +++ b/113_&as;PScreen_Party.rb
-@@ -1256,10 +1256,7 @@ class PokemonScreen
+@@ -12,8 +12,6 @@ class PokemonMail
+   end
+ end
+ 
+-
+-
+ def pbMoveToMailbox(pokemon)
+   $PokemonGlobal.mailbox=[] if !$PokemonGlobal.mailbox
+   return false if $PokemonGlobal.mailbox.length>=10
+@@ -1256,10 +1254,7 @@ class PokemonScreen
        cmdMail=-1
        # Build the commands
        commands[cmdSummary=commands.length]=_INTL("Summary")
@@ -26,7 +35,7 @@ index fc6a5e3..de161c6 100644
        cmdMoves=[-1,-1,-1,-1]
        for i in 0...pkmn.moves.length
          move=pkmn.moves[i]
-@@ -1370,5 +1367,716 @@ class PokemonScreen
+@@ -1370,5 +1365,710 @@ class PokemonScreen
      end
      @scene.pbEndScene
      return nil
@@ -98,32 +107,34 @@ index fc6a5e3..de161c6 100644
 +      elsif cmd == 4
 +			  gender(pkmn, pkmnid)
 +      elsif cmd == 5
-+			  nature(pkmn, pkmnid)
++			  ability(pkmn, pkmnid)
 +      elsif cmd == 6
-+			  shininess(pkmn, pkmnid)
++			  nature(pkmn, pkmnid)
 +      elsif cmd == 7
-+			  form(pkmn, pkmnid)
++			  shininess(pkmn, pkmnid)
 +      elsif cmd == 8
-+			  happiness(pkmn, pkmnid)
++			  form(pkmn, pkmnid)
 +      elsif cmd == 9
-+			  evivpid(pkmn, pkmnid)
++			  happiness(pkmn, pkmnid)
 +      elsif cmd == 10
-+			  pokerus(pkmn, pkmnid)
++			  evivpid(pkmn, pkmnid)
 +      elsif cmd == 11
-+			  ownership(pkmn, pkmnid)
++			  pokerus(pkmn, pkmnid)
 +      elsif cmd == 12
-+			  nickname(pkmn, pkmnid)
++			  ownership(pkmn, pkmnid)
 +      elsif cmd == 13
-+			  pokeball(pkmn, pkmnid)
++			  nickname(pkmn, pkmnid)
 +      elsif cmd == 14
-+			  ribbons(pkmn, pkmnid)
++			  pokeball(pkmn, pkmnid)
 +      elsif cmd == 15
-+			  egg(pkmn, pkmnid)
++			  ribbons(pkmn, pkmnid)
 +      elsif cmd == 16
-+			  shadowpokemon(pkmn, pkmnid)
++			  egg(pkmn, pkmnid)
 +      elsif cmd == 17
-+			  duplicate(pkmn, pkmnid)
++			  shadowpokemon(pkmn, pkmnid)
 +      elsif cmd == 18
++			  duplicate(pkmn, pkmnid)
++      elsif cmd == 19
 +			  delete(pkmn, pkmnid)
 +			end
 +      cmdwindow.visible = true
@@ -143,7 +154,7 @@ index fc6a5e3..de161c6 100644
 +			 _INTL("Status: Frozen"),
 +			 _INTL("Fainted"),
 +			 _INTL("Heal")
-+			],pkmn)
++			],0)
 +			# Break
 +			if cmd==-1
 +			break
@@ -206,11 +217,7 @@ index fc6a5e3..de161c6 100644
 +	end
 +
 +	def species(pkmn, pkmnid)
-+		if pbNewSelectStyle
-+			species = pbChoosePokemonID
-+		else
-+			species=pbChooseSpecies(pkmn.species)
-+		end
++		species=pbChooseSpecies(pkmn.species)
 +		if species!=0
 +			oldspeciesname=PBSpecies.getName(pkmn.species)
 +			pkmn.species=species
@@ -230,17 +237,13 @@ index fc6a5e3..de161c6 100644
 +			 _INTL("Teach move"),
 +			 _INTL("Forget move"),
 +			 _INTL("Reset movelist"),
-+			 _INTL("Reset initial moves")],pkmn)
++			 _INTL("Reset initial moves")],0)
 +			# Break
 +			if cmd==-1
 +			break
 +			# Teach move
 +			elsif cmd==0
-+			if pbNewSelectStyle
-+				move=pbChooseMoveID
-+			else
-+				move=pbChooseMoveList
-+			end
++			move=pbChooseMoveList
 +			if move!=0
 +				pbLearnMove(pkmn,move)
 +				pbRefreshSingle(pkmnid)
@@ -280,7 +283,7 @@ index fc6a5e3..de161c6 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Make male"),
 +				 _INTL("Make female"),
-+				 _INTL("Remove override")],pkmn)
++				 _INTL("Remove override")],0)
 +			# Break
 +			if cmd==-1
 +				break
@@ -323,7 +326,7 @@ index fc6a5e3..de161c6 100644
 +			commands.push(_INTL("Remove override"))
 +			msg=[_INTL("Ability {1} is natural.",oldabil),
 +				 _INTL("Ability {1} is being forced.",oldabil)][pkmn.abilityflag ? 1 : 0]
-+			cmd=@scene.pbShowCommands(msg,commands,pkmn)
++			cmd=@scene.pbShowCommands(msg,commands,0)
 +			# Break
 +			if cmd==-1
 +			break
@@ -374,7 +377,7 @@ index fc6a5e3..de161c6 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Make shiny"),
 +				 _INTL("Make normal"),
-+				 _INTL("Remove override")],pkmn)
++				 _INTL("Remove override")],0)
 +			# Break
 +			if cmd==-1
 +			break
@@ -427,7 +430,7 @@ index fc6a5e3..de161c6 100644
 +			cmd=@scene.pbShowCommands(_INTL("Personal ID is {1}.",persid),[
 +			 _INTL("Set EVs"),
 +			 _INTL("Set IVs"),
-+			 _INTL("Randomise pID")],pkmn)
++			 _INTL("Randomise pID")],0)
 +			case cmd
 +			# Break
 +			when -1
@@ -440,7 +443,7 @@ index fc6a5e3..de161c6 100644
 +				for i in 0...stats.length
 +					evcommands.push(stats[i]+" (#{pkmn.ev[i]})")
 +				end
-+				cmd2=@scene.pbShowCommands(_INTL("Change which EV?"),evcommands,pkmn)
++				cmd2=@scene.pbShowCommands(_INTL("Change which EV?"),evcommands,0)
 +				if cmd2==-1
 +					break
 +				elsif cmd2>=0 && cmd2<stats.length
@@ -467,7 +470,7 @@ index fc6a5e3..de161c6 100644
 +					ivcommands.push(stats[i]+" (#{pkmn.iv[i]})")
 +				end
 +				ivcommands.push(_INTL("Randomise all"))
-+				cmd2=@scene.pbShowCommands(msg,ivcommands,pkmn)
++				cmd2=@scene.pbShowCommands(msg,ivcommands,0)
 +				if cmd2==-1
 +					break
 +				elsif cmd2>=0 && cmd2<stats.length
@@ -513,7 +516,7 @@ index fc6a5e3..de161c6 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Give random strain"),
 +				 _INTL("Make not infectious"),
-+				 _INTL("Clear Pokérus")],pkmn)
++				 _INTL("Clear Pokérus")],0)
 +			# Break
 +			if cmd==-1
 +			break
@@ -544,7 +547,7 @@ index fc6a5e3..de161c6 100644
 +				 _INTL("Set OT's name"),
 +				 _INTL("Set OT's gender"),
 +				 _INTL("Random foreign ID"),
-+				 _INTL("Set foreign ID")],pkmn)
++				 _INTL("Set foreign ID")],0)
 +			# Break
 +			if cmd==-1
 +			break
@@ -560,7 +563,7 @@ index fc6a5e3..de161c6 100644
 +			# Set OT's gender
 +			elsif cmd==2
 +			cmd2=@scene.pbShowCommands(_INTL("Set OT's gender."),
-+				 [_INTL("Male"),_INTL("Female"),_INTL("Unknown")],pkmn)
++				 [_INTL("Male"),_INTL("Female"),_INTL("Unknown")],0)
 +			pkmn.otgender=cmd2 if cmd2>=0
 +			# Random foreign ID
 +			elsif cmd==3
@@ -586,13 +589,13 @@ index fc6a5e3..de161c6 100644
 +				 _INTL("{1} has no nickname.",speciesname)][pkmn.name==speciesname ? 1 : 0]
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Rename"),
-+				 _INTL("Erase name")],pkmn)
++				 _INTL("Erase name")],0)
 +			# Break
 +			if cmd==-1
 +			break
 +			# Rename
 +			elsif cmd==0
-+			newname=pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),0,11,"",pkmn)
++			newname=pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),0,11,"",0)
 +			pkmn.name=(newname=="") ? speciesname : newname
 +			pbRefreshSingle(pkmnid)
 +			# Erase name
@@ -658,7 +661,7 @@ index fc6a5e3..de161c6 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Make egg"),
 +				 _INTL("Make Pokémon"),
-+				 _INTL("Set eggsteps to 1")],pkmn)
++				 _INTL("Set eggsteps to 1")],0)
 +			# Break
 +			if cmd==-1
 +			break
@@ -698,7 +701,7 @@ index fc6a5e3..de161c6 100644
 +				 _INTL("Heart gauge is {1}.",pkmn.heartgauge)][(pkmn.isShadow? rescue false) ? 1 : 0]
 +			cmd=@scene.pbShowCommands(msg,[
 +			 _INTL("Make Shadow"),
-+			 _INTL("Lower heart gauge")],pkmn)
++			 _INTL("Lower heart gauge")],0)
 +			# Break
 +			if cmd==-1
 +			break

@@ -31,7 +31,7 @@ decompile: decompile-rgssad decompile-scripts
 .PHONY: pokemon-debug-menu
 pokemon-debug-menu: check-git
 	@cd tmp/Data/Scripts && git init && git add . && git commit --message init && git apply ../../../$@.patch && cd ../../..
-	@rm -rf tmp/Data/Scripts/.git
+# @rm -rf tmp/Data/Scripts/.git
 
 .PHONY: compile-rgssad
 compile-rgssad: rgssad check-pokemon-uranium
