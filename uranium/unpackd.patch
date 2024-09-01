@@ -1,0 +1,37 @@
+diff --git a/lib/unpackd/rgss/serialize.rb b/lib/unpackd/rgss/serialize.rb
+index 0977f5b..5ab4356 100644
+--- a/lib/unpackd/rgss/serialize.rb
++++ b/lib/unpackd/rgss/serialize.rb
+@@ -193,9 +193,16 @@ module RGSS
+     # Aggregate individual script files into Scripts.rxdata
+     files.sort!
+     files.each do |f|
+-      section_name = filename_to_title(f)
+-      content = File.open(File.join(path, f), "rb") { |f2| f2.read }#.gsub(/\n/, "\r\n")
+-      scripts << [rand(999_999), section_name, deflate(content)]
++      if f.include?("PBattle_OrgBattleRules")
++        echo("skipping deflate of #{f}")
++        section_name = filename_to_title(f)
++        content = File.open(File.join(path, f), "rb") { |f2| f2.read }#.gsub(/\n/, "\r\n")
++        scripts << [rand(999_999), section_name, content]
++      else
++        section_name = filename_to_title(f)
++        content = File.open(File.join(path, f), "rb") { |f2| f2.read }#.gsub(/\n/, "\r\n")
++        scripts << [rand(999_999), section_name, deflate(content)]
++      end
+     end
+ 
+     # Check each subfolder for scripts to aggregate
+@@ -255,7 +262,11 @@ module RGSS
+     scripts.each_with_index do |e, i|
+       _, title, script = e
+       title = title_to_filename(title).strip
+-      script = inflate(script)
++      if !title.include?("PBattle_OrgBattleRules")
++        script = inflate(script)
++      else
++        echo("skipping inflate of #{title}")
++      end
+       next if title.empty? && script.empty?
+ 
+       section_name = nil

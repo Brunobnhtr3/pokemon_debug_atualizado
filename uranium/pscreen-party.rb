@@ -1,5 +1,5 @@
 class PokemonScreen
-  def pbPokemonDebug(pkmn, pkmnid)
+  def pbPokemonDebugMenu(s,pkmn, pkmnid)
 		viewport = Viewport.new(286,0,Graphics.width,Graphics.height)
 		viewport.z = 99999
 		sprites = {}
