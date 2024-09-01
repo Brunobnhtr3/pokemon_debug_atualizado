@@ -11,7 +11,7 @@ make decompile POKEMON_URANIUM=path/to/pokemon/uranium
 make compile POKEMON_URANIUM=path/to/pokemon/uranium
 ```
 
-Contains a [patch](pokemon-debug-menu.patch) for implementing a debug menu in Pokemon Uranium to allow editing of a Pokemon's Nature, EVs and IVs to avoid senseless breeding/resetting grind.
+Contains a [patch](pokemon-debug-menu.patch) for implementing a Pokemon debug menu in Pokemon Uranium to allow editing of a Pokemon's Nature, EVs and IVs to avoid senseless breeding/resetting grind.
 
 ```sh
 make decompile pokemon-debug-menu compile POKEMON_URANIUM=path/to/pokemon/uranium
