@@ -11,7 +11,7 @@ index 193272b..dda927b 100644
 +  end
 +end
 diff --git a/113_&as;PScreen_Party.rb b/113_&as;PScreen_Party.rb
-index fc6a5e3..e67beff 100644
+index fc6a5e3..de161c6 100644
 --- a/113_&as;PScreen_Party.rb
 +++ b/113_&as;PScreen_Party.rb
 @@ -1256,10 +1256,7 @@ class PokemonScreen
@@ -143,7 +143,7 @@ index fc6a5e3..e67beff 100644
 +			 _INTL("Status: Frozen"),
 +			 _INTL("Fainted"),
 +			 _INTL("Heal")
-+			],296,0,pkmn)
++			],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -230,7 +230,7 @@ index fc6a5e3..e67beff 100644
 +			 _INTL("Teach move"),
 +			 _INTL("Forget move"),
 +			 _INTL("Reset movelist"),
-+			 _INTL("Reset initial moves")],296,0,pkmn)
++			 _INTL("Reset initial moves")],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -280,7 +280,7 @@ index fc6a5e3..e67beff 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Make male"),
 +				 _INTL("Make female"),
-+				 _INTL("Remove override")],296,0,pkmn)
++				 _INTL("Remove override")],pkmn)
 +			# Break
 +			if cmd==-1
 +				break
@@ -323,7 +323,7 @@ index fc6a5e3..e67beff 100644
 +			commands.push(_INTL("Remove override"))
 +			msg=[_INTL("Ability {1} is natural.",oldabil),
 +				 _INTL("Ability {1} is being forced.",oldabil)][pkmn.abilityflag ? 1 : 0]
-+			cmd=@scene.pbShowCommands(msg,commands,296,0,pkmn)
++			cmd=@scene.pbShowCommands(msg,commands,pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -349,7 +349,7 @@ index fc6a5e3..e67beff 100644
 +			commands.push(_INTL("Remove override"))
 +			msg=[_INTL("Nature {1} is natural.",oldnature),
 +				 _INTL("Nature {1} is being forced.",oldnature)][pkmn.natureflag ? 1 : 0]
-+			cmd=@scene.pbShowCommands_old(msg,commands,cmd)
++			cmd=@scene.pbShowCommands(msg,commands,cmd)
 +			# Break
 +			if cmd==-1
 +			break
@@ -374,7 +374,7 @@ index fc6a5e3..e67beff 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Make shiny"),
 +				 _INTL("Make normal"),
-+				 _INTL("Remove override")],296,0,pkmn)
++				 _INTL("Remove override")],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -427,7 +427,7 @@ index fc6a5e3..e67beff 100644
 +			cmd=@scene.pbShowCommands(_INTL("Personal ID is {1}.",persid),[
 +			 _INTL("Set EVs"),
 +			 _INTL("Set IVs"),
-+			 _INTL("Randomise pID")],296,0,pkmn)
++			 _INTL("Randomise pID")],pkmn)
 +			case cmd
 +			# Break
 +			when -1
@@ -440,7 +440,7 @@ index fc6a5e3..e67beff 100644
 +				for i in 0...stats.length
 +					evcommands.push(stats[i]+" (#{pkmn.ev[i]})")
 +				end
-+				cmd2=@scene.pbShowCommands(_INTL("Change which EV?"),evcommands,296,0,pkmn)
++				cmd2=@scene.pbShowCommands(_INTL("Change which EV?"),evcommands,pkmn)
 +				if cmd2==-1
 +					break
 +				elsif cmd2>=0 && cmd2<stats.length
@@ -467,7 +467,7 @@ index fc6a5e3..e67beff 100644
 +					ivcommands.push(stats[i]+" (#{pkmn.iv[i]})")
 +				end
 +				ivcommands.push(_INTL("Randomise all"))
-+				cmd2=@scene.pbShowCommands(msg,ivcommands,296,0,pkmn)
++				cmd2=@scene.pbShowCommands(msg,ivcommands,pkmn)
 +				if cmd2==-1
 +					break
 +				elsif cmd2>=0 && cmd2<stats.length
@@ -513,7 +513,7 @@ index fc6a5e3..e67beff 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Give random strain"),
 +				 _INTL("Make not infectious"),
-+				 _INTL("Clear Pokérus")],296,0,pkmn)
++				 _INTL("Clear Pokérus")],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -544,7 +544,7 @@ index fc6a5e3..e67beff 100644
 +				 _INTL("Set OT's name"),
 +				 _INTL("Set OT's gender"),
 +				 _INTL("Random foreign ID"),
-+				 _INTL("Set foreign ID")],296,0,pkmn)
++				 _INTL("Set foreign ID")],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -560,7 +560,7 @@ index fc6a5e3..e67beff 100644
 +			# Set OT's gender
 +			elsif cmd==2
 +			cmd2=@scene.pbShowCommands(_INTL("Set OT's gender."),
-+				 [_INTL("Male"),_INTL("Female"),_INTL("Unknown")],296,0,pkmn)
++				 [_INTL("Male"),_INTL("Female"),_INTL("Unknown")],pkmn)
 +			pkmn.otgender=cmd2 if cmd2>=0
 +			# Random foreign ID
 +			elsif cmd==3
@@ -586,7 +586,7 @@ index fc6a5e3..e67beff 100644
 +				 _INTL("{1} has no nickname.",speciesname)][pkmn.name==speciesname ? 1 : 0]
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Rename"),
-+				 _INTL("Erase name")],296,0,pkmn)
++				 _INTL("Erase name")],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -618,7 +618,7 @@ index fc6a5e3..e67beff 100644
 +			for i in balls
 +			commands.push(i[1])
 +			end
-+			cmd=@scene.pbShowCommands_old(_INTL("{1} used.",oldball),commands,cmd)
++			cmd=@scene.pbShowCommands(_INTL("{1} used.",oldball),commands,cmd)
 +			if cmd==-1
 +			break
 +			else
@@ -637,7 +637,7 @@ index fc6a5e3..e67beff 100644
 +			commands.push(_INTL("{1} {2}",
 +				 pkmn.hasRibbon?(i) ? "[X]" : "[  ]",PBRibbons.getName(i)))
 +			end
-+			cmd=@scene.pbShowCommands_old(_INTL("{1} ribbons.",pkmn.ribbonCount),commands,cmd)
++			cmd=@scene.pbShowCommands(_INTL("{1} ribbons.",pkmn.ribbonCount),commands,cmd)
 +			if cmd==-1
 +			break
 +			elsif cmd>=0 && cmd<commands.length
@@ -658,7 +658,7 @@ index fc6a5e3..e67beff 100644
 +			cmd=@scene.pbShowCommands(msg,[
 +				 _INTL("Make egg"),
 +				 _INTL("Make Pokémon"),
-+				 _INTL("Set eggsteps to 1")],296,0,pkmn)
++				 _INTL("Set eggsteps to 1")],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
@@ -698,7 +698,7 @@ index fc6a5e3..e67beff 100644
 +				 _INTL("Heart gauge is {1}.",pkmn.heartgauge)][(pkmn.isShadow? rescue false) ? 1 : 0]
 +			cmd=@scene.pbShowCommands(msg,[
 +			 _INTL("Make Shadow"),
-+			 _INTL("Lower heart gauge")],296,0,pkmn)
++			 _INTL("Lower heart gauge")],pkmn)
 +			# Break
 +			if cmd==-1
 +			break
