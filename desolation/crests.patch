@@ -29,7 +29,8 @@ index 7c23fbc..90d353b 100644
    def hasCrest?
 -    return false if !Rejuv
      return true if $PokemonBag.pbQuantity(:SILVCREST)>0 && @species == :SILVALLY && @battle.pbOwnedByPlayer?(@index)
-     return true if @battle.pbGetOwnerItems(@index).include?(:SILVCREST) && @species == :SILVALLY && !@battle.pbOwnedByPlayer?(@index)
+-    return true if @battle.pbGetOwnerItems(@index).include?(:SILVCREST) && @species == :SILVALLY && !@battle.pbOwnedByPlayer?(@index)
++    return true if (@battle.pbGetOwnerItems(@index) || []).include?(:SILVCREST) && @species == :SILVALLY && !@battle.pbOwnedByPlayer?(@index)
      return false if !@item || !$cache.items[@item].checkFlag?(:crest)
 @@ -412,7 +411,7 @@ class PokeBattle_Battler
      end

@@ -124,7 +124,7 @@ index e9bd67c..37259f6 100644
 +:ARCHCREST => {
 +	:ID => 865,
 +	:name => "Archeops Crest",
-+	:desc => "Removes Defeatest and grants Defiant. Upon switching in, opponent lowers Attack by 1 stage.",
++	:desc => "Removes Defeatest and grants Defiant. Upon switching in, opponent Intimidates.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
