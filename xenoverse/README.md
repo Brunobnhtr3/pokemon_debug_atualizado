@@ -2,7 +2,7 @@
 
 Pokemon Xenoverse obfuscates its Ruby scripts by placing them in `Scripts.xvd`.
 
-Contains a [Python script](main.py) for converting Pokemon Xenoverse's Ruby scripts and its compiled `Scripts.xvd` back and forth, based on https://github.com/godmodemaker/xenoscr-comdecom. To use it, install [`python`]([https://doc.rust-lang.org/cargo/getting-started/installation.html](https://www.python.org/downloads/).
+Contains a [Python script](main.py) for converting Pokemon Xenoverse's Ruby scripts and its compiled `Scripts.xvd` back and forth, based on https://github.com/godmodemaker/xenoscr-comdecom. To use it, install [`python`](https://www.python.org/downloads/).
 
 ```sh
 # Extract scripts from Data/Scripts.xvd
