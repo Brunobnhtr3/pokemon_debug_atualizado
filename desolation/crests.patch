@@ -1,0 +1,171 @@
+diff --git a/Battle.rb b/Battle.rb
+index 8e561a8..96c63a8 100644
+--- a/Battle.rb
++++ b/Battle.rb
+@@ -759,7 +759,7 @@ class PokeBattle_Battle
+       end
+     end
+     return true if PBStuff::POKEMONTOMEGASTONE[pkmn.species].include?(item)
+-    return true if Rejuv && (PBStuff::POKEMONTOCREST[pkmn.species] == item)
++    return true if (PBStuff::POKEMONTOCREST[pkmn.species] == item)
+     return true if (pkmn.species == :GENESECT) && ((item == :SHOCKDRIVE) || (item == :BURNDRIVE) || (item == :CHILLDRIVE) || (item == :DOUSEDRIVE)) 
+     return true if (pkmn.species == :GROUDON) && (item == :REDORB)
+     return true if (pkmn.species == :KYOGRE) && (item == :BLUEORB)
+@@ -1694,6 +1694,7 @@ class PokeBattle_Battle
+       end
+     else
+       @scene.pbSendOut(index,pokemon)
++      pbCrestEffects(index,pokemon) if @battlers[index].crested
+     end
+     @scene.pbResetMoveIndex(index)
+   end
+diff --git a/Battler.rb b/Battler.rb
+index 7c23fbc..90d353b 100644
+--- a/Battler.rb
++++ b/Battler.rb
+@@ -120,7 +120,6 @@ class PokeBattle_Battler
+   end
+ 
+   def hasCrest?
+-    return false if !Rejuv
+     return true if $PokemonBag.pbQuantity(:SILVCREST)>0 && @species == :SILVALLY && @battle.pbOwnedByPlayer?(@index)
+     return true if @battle.pbGetOwnerItems(@index).include?(:SILVCREST) && @species == :SILVALLY && !@battle.pbOwnedByPlayer?(@index)
+     return false if !@item || !$cache.items[@item].checkFlag?(:crest)
+@@ -412,7 +411,7 @@ class PokeBattle_Battler
+     end
+     @iv           = pkmn.iv
+     @item         = pkmn.item
+-    @crested = hasCrest?
++    @crested = hasCrest? ? pkmn.species : false
+     crestStats if @crested
+ 
+     @startform = @form
+@@ -5945,4 +5944,4 @@ class PokeBattle_Battler
+         end
+       end
+     end
+-end
+\ No newline at end of file
++end
+diff --git a/DataObjects - Yeeters.rb b/DataObjects - Yeeters.rb
+index ec0b506..9a64652 100644
+--- a/DataObjects - Yeeters.rb	
++++ b/DataObjects - Yeeters.rb	
+@@ -142,7 +142,14 @@ def itemDump
+   keys = [515, 521, 522, 536, 591, 600, 601, 602, 603, 615, 640, 686, 662, 663, 664, 794, 797, 862, 858, 859, 860]
+   lakekey = [649, 650, 651, 652, 653, 654, 655, 656, 657, 658, 659]
+   legendary = [854, 855, 519, 587, 588, 638, 779, 780]
+-  crest = (823..835).to_a + [861,893,894,1039] + (864..877).to_a + (879..882).to_a + (1025..1035).to_a 
++  if Rejuv
++    crest = (823..835).to_a + [861,893,894,1039] + (864..877).to_a + (879..882).to_a + (1025..1035).to_a
++  elsif Desolation
++    # Add custom Crest IDs here.
++    # crest = [864]
++    # or
++    # crest = (864..865).to_a
++  end
+   exporttext = "ITEMHASH = {\n"
+   for item in $cache.items
+     next if item.nil? || item.empty? || (21..27).to_a.include?(item[ITEMID]) || item[ITEMID] == 515 || item[ITEMID] == 560
+@@ -202,9 +209,7 @@ def itemDump
+       exporttext += "\t:image => \"key\",\n" if (649..659).to_a.include?(item[ITEMID])
+       exporttext += "\t:legendary => true,\n" if legendary.include?(item[ITEMID])
+     end
+-    if Rejuv
+-      exporttext += "\t:crest => true,\n" if crest.include?(item[ITEMID])
+-    end
++    exporttext += "\t:crest => true,\n" if crest.include?(item[ITEMID])
+     exporttext += "},\n\n"
+   end
+   exporttext += "}"
+@@ -278,6 +283,10 @@ def itemDumpCurrent
+     resistberries = (424..440).to_a + [571]
+     pinchberries = (399..403).to_a + (441..450).to_a - [448]
+   elsif Desolation
++    # Add custom Crest IDs here.
++    # crest = [864]
++    # or
++    # crest = (864..865).to_a
+     exclusions = [49]
+     memory = (655..670).to_a
+     mint = (781..801).to_a
+@@ -1387,4 +1396,4 @@ def dumpNatures
+   File.open("Scripts/"+GAMEFOLDER+"/naturetxt.rb", "w"){|f|
+     f.write(output)
+   }
+-end
+\ No newline at end of file
++end
+diff --git a/PBStuff.rb b/PBStuff.rb
+index 09d64c8..ddb8060 100644
+--- a/PBStuff.rb
++++ b/PBStuff.rb
+@@ -458,6 +458,8 @@ POKEMONTOCREST = {
+   :DELCATTY     => :DELCREST,         :SWALOT  => :SWACREST,
+   :CINCCINO  => :CINCCREST,           :PROBOPASS    => :PROBOCREST,
+   :BASTIODON => :BASTCREST,
++  # Add Pokemon to custom Crests here.
++  # :SOMEPOKEMON => :CUSTOMCREST,
+ }
+ 
+ SILVALLYCRESTABILITIES = {
+@@ -604,4 +606,4 @@ class PBFields
+ 	CITY = 41
+ 	CITYNEW = 42
+ 
+-end
+\ No newline at end of file
++end
+diff --git a/Pokemon Desolation/DesoPokeBattle_Battle.rb b/Pokemon Desolation/DesoPokeBattle_Battle.rb
+index 191d4d4..119adf7 100644
+--- a/Pokemon Desolation/DesoPokeBattle_Battle.rb	
++++ b/Pokemon Desolation/DesoPokeBattle_Battle.rb	
+@@ -3,4 +3,10 @@ class PokeBattle_Battle
+     newfield = [newfield] if newfield && !newfield.is_a?(Array)
+     return !([:UNDERWATER,:NEWWORLD,:DARKNESS1,:DARKNESS2,:DARKNESS3]+newfield).include?(@field.effect)
+   end
+-end
+\ No newline at end of file
++
++  def pbCrestEffects(index,pokemon)
++    return if !@battlers[index].crested
++    case @battlers[index].species
++    end
++  end
++end
+diff --git a/Pokemon Desolation/DesoPokeBattle_Battler.rb b/Pokemon Desolation/DesoPokeBattle_Battler.rb
+index 337c6ab..0586e6e 100644
+--- a/Pokemon Desolation/DesoPokeBattle_Battler.rb	
++++ b/Pokemon Desolation/DesoPokeBattle_Battler.rb	
+@@ -12,4 +12,9 @@ class PokeBattle_Battler
+   def pbFindUser2(_choice,_move)
+     return self
+   end
+-end
+\ No newline at end of file
++
++  def crestStats
++    case @crested
++    end
++  end
++end
+diff --git a/Pokemon Desolation/itemtext.rb b/Pokemon Desolation/itemtext.rb
+index 3bfea30..e9bd67c 100644
+--- a/Pokemon Desolation/itemtext.rb	
++++ b/Pokemon Desolation/itemtext.rb	
+@@ -7752,4 +7752,13 @@ ITEMHASH = {
+ 	:price => 2500,
+ 	:questitem => true,
+ },
+-}
+\ No newline at end of file
++# :CUSTOMCREST => {
++# 	:ID => 864,
++# 	:name => "Custom Crest",
++# 	:desc => "Does custom stuff.",
++# 	:price => 0,
++# 	:crest => true,
++# 	:noUseInBattle => true,
++# 	:noUse => true,
++# },
++}

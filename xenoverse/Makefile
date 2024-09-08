@@ -1,14 +1,16 @@
-PYTHON = python
-PIP = pip
+include ../lib.mk
 
 WD = $(CURDIR)/tmp
+
+PYTHON = python
+PIP = pip
 
 .PHONY: clean
 clean:
 	@rm -rf $(WD)
 
 .PHONY: requirements.txt
-requirements.txt: check-python
+requirements.txt:
 	@$(PIP) install --ignore-installed --break-system-packages -r requirements.txt
 
 .PHONY: decompile-scripts
@@ -20,12 +22,11 @@ decompile-scripts: check-pokemon-xenoverse requirements.txt clean
 decompile: decompile-scripts
 
 .PHONY: pokemon-debug-menu
-pokemon-debug-menu: check-git
-	@cd tmp && git init && git add . && git commit --message init && git apply ../$@.patch && cd ..
-	@rm -rf tmp/.git
+pokemon-debug-menu:
+	@cd tmp && (git init && git add . && git commit --message init || true) && git apply ../$@.patch && git commit --message $@ && cd ..
 
 .PHONY: compile-scripts
-compile-scripts: check-pokemon-xenoverse check-python
+compile-scripts: check-pokemon-xenoverse
 	@$(PYTHON) main.py --compile $(WD) $(POKEMON_XENOVERSE)/Data/Scripts.xvd
 
 .PHONY: compile
@@ -35,19 +36,4 @@ compile: compile-scripts
 check-pokemon-xenoverse:
 ifndef POKEMON_XENOVERSE
 	$(error POKEMON_XENOVERSE must be set to path/to/pokemon/xenoverse)
-endif
-
-.PHONY: check-git
-check-git:
-ifeq ($(shell command -v git 2>/dev/null),)
-    $(error "git is not installed")
-endif
-
-.PHONY: check-python
-check-python:
-ifeq ($(shell command -v $(PYTHON) 2>/dev/null),)
-    $(error "$(PYTHON) is not installed")
-endif
-ifeq ($(shell command -v $(PIP) 2>/dev/null),)
-    $(error "$(PIP) is not installed")
 endif

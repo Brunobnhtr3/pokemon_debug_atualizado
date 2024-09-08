@@ -1,0 +1,45 @@
+diff --git a/Party.rb b/Party.rb
+index 20adcf3..0d1b718 100644
+--- a/Party.rb
++++ b/Party.rb
+@@ -1492,10 +1492,8 @@ class PokemonScreen
+       cmdRename=-1
+       # Build the commands
+       commands[cmdSummary=commands.length]=_INTL("Summary")
+-      if $DEBUG
+-        # Commands for debug mode only
+-        commands[cmdDebug=commands.length]=_INTL("Debug")
+-      end
++      # Commands for debug mode only
++      commands[cmdDebug=commands.length]=_INTL("Debug")
+       if $game_switches[:EasyHMs_Password]
+         acmdTMX=-1
+         commands[acmdTMX=commands.length]=_INTL("Use TMX")
+diff --git a/Storage.rb b/Storage.rb
+index c21a6e1..008523a 100644
+--- a/Storage.rb
++++ b/Storage.rb
+@@ -886,7 +886,7 @@ class PokemonStorageScreen
+               _INTL("Release"),
+               _INTL("Cancel")
+             ]
+-            commands.push(_INTL("Debug")) if $DEBUG
++            commands.push(_INTL("Debug"))
+             
+             if heldpoke
+               helptext=_INTL("{1} is selected.",heldpoke.name)
+@@ -936,12 +936,8 @@ class PokemonStorageScreen
+               pbRelease(selected,@heldpkmn)
+             when 7
+             when 8  
+-              if $DEBUG
+-                pkmn=@heldpkmn ? @heldpkmn : pokemon
+-                pbPokemonDebug(self, pkmn, nil, selected, heldpoke)
+-              else
+-                break
+-              end
++              pkmn=@heldpkmn ? @heldpkmn : pokemon
++              pbPokemonDebug(self, pkmn, nil, selected, heldpoke)
+             end
+           end
+         end

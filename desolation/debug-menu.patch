@@ -1,0 +1,13 @@
+diff --git a/PauseMenu.rb b/PauseMenu.rb
+index ccbc6ee..b2265e9 100644
+--- a/PauseMenu.rb
++++ b/PauseMenu.rb
+@@ -142,7 +142,7 @@ class PokemonMenu
+     end
+     commands[cmdOption=commands.length]=_INTL("Options")
+     commands[cmdControls=commands.length]=_INTL("Controls")    
+-    commands[cmdDebug=commands.length]=_INTL("Debug") if $DEBUG
++    commands[cmdDebug=commands.length]=_INTL("Debug")
+     commands[cmdEndGame=commands.length]=_INTL("Quit Game")
+     $game_screen.getTimeCurrent(true)
+     loop do

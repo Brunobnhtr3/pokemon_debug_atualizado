@@ -1,0 +1,183 @@
+diff --git a/Battler.rb b/Battler.rb
+index de505ae..517df95 100644
+--- a/Battler.rb
++++ b/Battler.rb
+@@ -5576,6 +5576,16 @@ class PokeBattle_Battler
+           user.effects[:Outrage]=0
+         end
+       end
++
++      if user.species == :VICTINI && user.crested && basemove.move == :VCREATE && ((@battle.pbCanChooseNonActive?(self.index) && !@battle.pbAllFainted?(@battle.pbParty(self.index))) || @battle.pbIsWild?)
++        if @battle.pbIsWild?
++          return if @battle.cantescape || $game_switches[:Never_Escape]
++          @battle.decision=3 # Set decision to escaped
++        else
++          self.userSwitch = true
++        end
++      end
++
+       # Switch moves
+       for i in @battle.battlers
+         if i.userSwitch
+diff --git a/DataObjects - Yeeters.rb b/DataObjects - Yeeters.rb
+index 9a64652..dcaf84e 100644
+--- a/DataObjects - Yeeters.rb	
++++ b/DataObjects - Yeeters.rb	
+@@ -149,6 +149,7 @@ def itemDump
+     # crest = [864]
+     # or
+     # crest = (864..865).to_a
++    crest = (864..869).to_a
+   end
+   exporttext = "ITEMHASH = {\n"
+   for item in $cache.items
+@@ -287,6 +288,7 @@ def itemDumpCurrent
+     # crest = [864]
+     # or
+     # crest = (864..865).to_a
++    crest = (864..869).to_a
+     exclusions = [49]
+     memory = (655..670).to_a
+     mint = (781..801).to_a
+diff --git a/PBStuff.rb b/PBStuff.rb
+index ddb8060..4eb3f12 100644
+--- a/PBStuff.rb
++++ b/PBStuff.rb
+@@ -460,6 +460,13 @@ POKEMONTOCREST = {
+   :BASTIODON => :BASTCREST,
+   # Add Pokemon to custom Crests here.
+   # :SOMEPOKEMON => :CUSTOMCREST,
++  :DIANCIE => :DIANCREST,             :CARBINK => :DIANCREST,
++  :ARCHEOPS => :ARCHCREST,            :ARCHEN => :ARCHCREST,
++  :VICTINI => :VICREST,
++  :JUMPLUFF => :JUMPCREST,            :SKIPLOOM => :JUMPCREST,
++  :HOPPIP => :JUMPCREST,
++  :CHATOT => :CHATCREST,
++  :MARACTUS => :MARACREST,
+ }
+ 
+ SILVALLYCRESTABILITIES = {
+diff --git a/Pokemon Desolation/DesoPokeBattle_Battle.rb b/Pokemon Desolation/DesoPokeBattle_Battle.rb
+index 119adf7..72a85da 100644
+--- a/Pokemon Desolation/DesoPokeBattle_Battle.rb	
++++ b/Pokemon Desolation/DesoPokeBattle_Battle.rb	
+@@ -7,6 +7,23 @@ class PokeBattle_Battle
+   def pbCrestEffects(index,pokemon)
+     return if !@battlers[index].crested
+     case @battlers[index].species
++    when :ARCHEOPS, :ARCHEN
++      if @battlers[index].pbCanReduceStatStage?(PBStats::ATTACK)
++        @battlers[index].pbReduceStat(PBStats::ATTACK,1,statdropper: @battlers[index].pbOpposing1)
++      end
++    when :JUMPLUFF, :SKIPLOOM, :HOPPIP
++      if !@battlers[index].pbOpposing1.isFainted?
++        opposing=@battlers[index].pbOpposing1
++        if opposing.pbCanReduceStatStage?(PBStats::SPDEF)
++          opposing.pbReduceStat(PBStats::SPDEF,1,statdropper: @battlers[index])
++        end
++      end
++      if !@battlers[index].pbOpposing2.isFainted?
++        opposing=@battlers[index].pbOpposing2
++        if opposing.pbCanReduceStatStage?(PBStats::SPDEF)
++          opposing.pbReduceStat(PBStats::SPDEF,1,statdropper: @battlers[index])
++        end
++      end
+     end
+   end
+ end
+diff --git a/Pokemon Desolation/DesoPokeBattle_Battler.rb b/Pokemon Desolation/DesoPokeBattle_Battler.rb
+index 0586e6e..f3c5673 100644
+--- a/Pokemon Desolation/DesoPokeBattle_Battler.rb	
++++ b/Pokemon Desolation/DesoPokeBattle_Battler.rb	
+@@ -15,6 +15,14 @@ class PokeBattle_Battler
+ 
+   def crestStats
+     case @crested
++    when :DIANCIE, :CARBINK
++      @abilities = [:MISTYSURGE]
++    when :ARCHEOPS, :ARCHEN
++      @ability = :DEFIANT
++    when :CHATOT
++      @abilities = [:PUNKROCK, :OVERCOAT]
++    when :MARACTUS
++      @abilities = [:SANDRUSH]
+     end
+   end
+ end
+diff --git a/Pokemon Desolation/itemtext.rb b/Pokemon Desolation/itemtext.rb
+index e9bd67c..37259f6 100644
+--- a/Pokemon Desolation/itemtext.rb	
++++ b/Pokemon Desolation/itemtext.rb	
+@@ -7761,4 +7761,58 @@ ITEMHASH = {
+ # 	:noUseInBattle => true,
+ # 	:noUse => true,
+ # },
++:DIANCREST => {
++	:ID => 864,
++	:name => "Diancie Crest",
++	:desc => "Grants Misty Surge.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:ARCHCREST => {
++	:ID => 865,
++	:name => "Archeops Crest",
++	:desc => "Removes Defeatest and grants Defiant. Upon switching in, opponent lowers Attack by 1 stage.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:VICREST => {
++	:ID => 866,
++	:name => "Victini Crest",
++	:desc => "V-create acts like U-turn.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:JUMPCREST => {
++	:ID => 867,
++	:name => "Jumpluff Crest",
++	:desc => "Upon switch in, decrease opponents' SpDef by 2 stages.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:CHATCREST => {
++	:ID => 868,
++	:name => "Chatot Crest",
++	:desc => "Grants Punk Rock and Overcoat.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:MARACREST => {
++	:ID => 869,
++	:name => "Maractus Crest",
++	:desc => "Grants Sand Rush.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
+ }
+diff --git a/Pokemon Desolation/montext.rb b/Pokemon Desolation/montext.rb
+index ef4557a..948baa4 100644
+--- a/Pokemon Desolation/montext.rb	
++++ b/Pokemon Desolation/montext.rb	
+@@ -39796,6 +39796,9 @@ MONHASH = {
+ 		:BattlerPlayerY => 25,
+ 		:BattlerEnemyY => 19,
+ 		:BattlerAltitude => 11,
++		:evolutions => [
++			[:DIANCIE,:LevelDay,36]
++		]
+ 	},
+ 
+ 	:OnCreation => {},
