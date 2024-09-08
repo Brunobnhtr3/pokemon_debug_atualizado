@@ -100,7 +100,7 @@ index 0586e6e..f3c5673 100644
 +    when :CHATOT
 +      @abilities = [:PUNKROCK, :OVERCOAT]
 +    when :MARACTUS
-+      @abilities = [:SANDRUSH]
++      @abilities = [:DRYSKIN, :SANDRUSH]
      end
    end
  end
@@ -142,7 +142,7 @@ index e9bd67c..37259f6 100644
 +:JUMPCREST => {
 +	:ID => 867,
 +	:name => "Jumpluff Crest",
-+	:desc => "Upon switch in, decrease opponents' SpDef by 2 stages.",
++	:desc => "Upon switch in, decrease opponents' SpDef by 1 stage.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
@@ -160,7 +160,7 @@ index e9bd67c..37259f6 100644
 +:MARACREST => {
 +	:ID => 869,
 +	:name => "Maractus Crest",
-+	:desc => "Grants Sand Rush.",
++	:desc => "Grants Dry Skin and Sand Rush.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
