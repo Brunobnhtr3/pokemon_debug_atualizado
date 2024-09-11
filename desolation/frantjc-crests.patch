@@ -1,8 +1,8 @@
 diff --git a/Battler.rb b/Battler.rb
-index de505ae..517df95 100644
+index b75988f..190256b 100644
 --- a/Battler.rb
 +++ b/Battler.rb
-@@ -5576,6 +5576,16 @@ class PokeBattle_Battler
+@@ -5574,6 +5574,16 @@ class PokeBattle_Battler
            user.effects[:Outrage]=0
          end
        end
@@ -20,14 +20,14 @@ index de505ae..517df95 100644
        for i in @battle.battlers
          if i.userSwitch
 diff --git a/DataObjects - Yeeters.rb b/DataObjects - Yeeters.rb
-index 9a64652..dcaf84e 100644
+index 9a64652..a05b5a2 100644
 --- a/DataObjects - Yeeters.rb	
 +++ b/DataObjects - Yeeters.rb	
 @@ -149,6 +149,7 @@ def itemDump
      # crest = [864]
      # or
      # crest = (864..865).to_a
-+    crest = (864..869).to_a
++    crest = (864..872).to_a
    end
    exporttext = "ITEMHASH = {\n"
    for item in $cache.items
@@ -35,41 +35,51 @@ index 9a64652..dcaf84e 100644
      # crest = [864]
      # or
      # crest = (864..865).to_a
-+    crest = (864..869).to_a
++    crest = (864..872).to_a
      exclusions = [49]
      memory = (655..670).to_a
      mint = (781..801).to_a
+diff --git a/Evolution.rb b/Evolution.rb
+index 45b1509..2828ad0 100644
+--- a/Evolution.rb
++++ b/Evolution.rb
+@@ -825,6 +825,7 @@ end
+ def checkEvolutionEx(pokemon)
+   return nil if pokemon.species.nil? || pokemon.isEgg?
+   return nil if [:EVERSTONE,:EEVIUMZ,:EVIOLITE].include?(pokemon.item)
++  return nil if pokemon.item == :VIGCREST && pokemon.species == :VIGOROTH
+   ret=nil
+   d= pbGetEvolvedFormData(pokemon.species,pokemon)
+   if !d.nil?
 diff --git a/PBStuff.rb b/PBStuff.rb
-index ddb8060..4eb3f12 100644
+index ddb8060..5aba216 100644
 --- a/PBStuff.rb
 +++ b/PBStuff.rb
-@@ -460,6 +460,13 @@ POKEMONTOCREST = {
+@@ -460,6 +460,11 @@ POKEMONTOCREST = {
    :BASTIODON => :BASTCREST,
    # Add Pokemon to custom Crests here.
    # :SOMEPOKEMON => :CUSTOMCREST,
-+  :DIANCIE => :DIANCREST,             :CARBINK => :DIANCREST,
-+  :ARCHEOPS => :ARCHCREST,            :ARCHEN => :ARCHCREST,
-+  :VICTINI => :VICREST,
-+  :JUMPLUFF => :JUMPCREST,            :SKIPLOOM => :JUMPCREST,
-+  :HOPPIP => :JUMPCREST,
-+  :CHATOT => :CHATCREST,
-+  :MARACTUS => :MARACREST,
++  :ARCHEOPS => :ARCHCREST,            :STARMIE => :STARMCREST,
++  :VICTINI => :VICREST,               :JUMPLUFF => :JUMPCREST,
++  :CHATOT => :CHATCREST,              :MARACTUS => :MARACREST,
++  :VIGOROTH => :VIGCREST,             :WHIMSICOTT => :WHIMSICREST,
++  :GENGAR => :GENGCREST,
  }
  
  SILVALLYCRESTABILITIES = {
 diff --git a/Pokemon Desolation/DesoPokeBattle_Battle.rb b/Pokemon Desolation/DesoPokeBattle_Battle.rb
-index 119adf7..72a85da 100644
+index 119adf7..f6d8f21 100644
 --- a/Pokemon Desolation/DesoPokeBattle_Battle.rb	
 +++ b/Pokemon Desolation/DesoPokeBattle_Battle.rb	
 @@ -7,6 +7,23 @@ class PokeBattle_Battle
    def pbCrestEffects(index,pokemon)
      return if !@battlers[index].crested
      case @battlers[index].species
-+    when :ARCHEOPS, :ARCHEN
++    when :ARCHEOPS
 +      if @battlers[index].pbCanReduceStatStage?(PBStats::ATTACK)
 +        @battlers[index].pbReduceStat(PBStats::ATTACK,1,statdropper: @battlers[index].pbOpposing1)
 +      end
-+    when :JUMPLUFF, :SKIPLOOM, :HOPPIP
++    when :JUMPLUFF
 +      if !@battlers[index].pbOpposing1.isFainted?
 +        opposing=@battlers[index].pbOpposing1
 +        if opposing.pbCanReduceStatStage?(PBStats::SPDEF)
@@ -86,36 +96,43 @@ index 119adf7..72a85da 100644
    end
  end
 diff --git a/Pokemon Desolation/DesoPokeBattle_Battler.rb b/Pokemon Desolation/DesoPokeBattle_Battler.rb
-index 0586e6e..f3c5673 100644
+index 0586e6e..e11d7be 100644
 --- a/Pokemon Desolation/DesoPokeBattle_Battler.rb	
 +++ b/Pokemon Desolation/DesoPokeBattle_Battler.rb	
-@@ -15,6 +15,14 @@ class PokeBattle_Battler
+@@ -15,6 +15,21 @@ class PokeBattle_Battler
  
    def crestStats
      case @crested
-+    when :DIANCIE, :CARBINK
++    when :GENGAR
 +      @abilities = [:MISTYSURGE]
-+    when :ARCHEOPS, :ARCHEN
++    when :STARMIE
++      @abilities = [:PSYCHICSURGE]
++    when :ARCHEOPS
 +      @ability = :DEFIANT
 +    when :CHATOT
 +      @abilities = [:PUNKROCK, :OVERCOAT]
 +    when :MARACTUS
 +      @abilities = [:DRYSKIN, :SANDRUSH]
++    when :VIGOROTH
++      @abilities = [:GORILLATACTICS]
++      @spdef, @defense = @spdef * 1.5, @defense * 1.5
++    when :WHIMSICOTT
++      # TODO.
      end
    end
  end
 diff --git a/Pokemon Desolation/itemtext.rb b/Pokemon Desolation/itemtext.rb
-index e9bd67c..37259f6 100644
+index e9bd67c..9aeb22b 100644
 --- a/Pokemon Desolation/itemtext.rb	
 +++ b/Pokemon Desolation/itemtext.rb	
-@@ -7761,4 +7761,58 @@ ITEMHASH = {
+@@ -7761,4 +7761,85 @@ ITEMHASH = {
  # 	:noUseInBattle => true,
  # 	:noUse => true,
  # },
-+:DIANCREST => {
++:STARMCREST => {
 +	:ID => 864,
-+	:name => "Diancie Crest",
-+	:desc => "Grants Misty Surge.",
++	:name => "Starmie Crest",
++	:desc => "Grants Psychic Surge.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
@@ -166,11 +183,65 @@ index e9bd67c..37259f6 100644
 +	:noUseInBattle => true,
 +	:noUse => true,
 +},
++:VIGCREST => {
++	:ID => 870,
++	:name => "Vigoroth Crest",
++	:desc => "Grants Gorilla Tactics, Eviolite, and Everstone.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:WHIMSICREST => {
++	:ID => 871,
++	:name => "Whimsicott Crest",
++	:desc => "TODO.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:GENGCREST => {
++	:ID => 872,
++	:name => "Gengar Crest",
++	:desc => "Grants Misty Surge.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
  }
 diff --git a/Pokemon Desolation/montext.rb b/Pokemon Desolation/montext.rb
-index ef4557a..948baa4 100644
+index ef4557a..d14f105 100644
 --- a/Pokemon Desolation/montext.rb	
 +++ b/Pokemon Desolation/montext.rb	
+@@ -5882,7 +5882,7 @@ MONHASH = {
+ 			[50,:DESTINYBOND],
+ 			[55,:HEX],
+ 			[61,:NIGHTMARE]],
+-		:compatiblemoves => [:ALLYSWITCH,:BIDE,:BODYSLAM,:BRICKBREAK,:CORROSIVEGAS,:COUNTER,:CURSE,:DARKPULSE,:DAZZLINGGLEAM,:DOUBLEEDGE,:DRAINPUNCH,:DREAMEATER,:DYNAMICPUNCH,:EMBARGO,:ENCORE,:ENERGYBALL,:EXPLOSION,:FIREPUNCH,:FLING,:FOCUSBLAST,:FOCUSPUNCH,:FOULPLAY,:GIGADRAIN,:GIGAIMPACT,:HEADBUTT,:HEX,:HYPERBEAM,:HYPNOSIS,:ICEPUNCH,:ICYWIND,:IMPRISON,:INFESTATION,:KNOCKOFF,:LASERFOCUS,:MEGADRAIN,:MEGAKICK,:MEGAPUNCH,:METRONOME,:MIMIC,:NASTYPLOT,:NIGHTMARE,:NIGHTSHADE,:OMINOUSWIND,:PAINSPLIT,:PAYBACK,:PHANTOMFORCE,:POISONJAB,:POLTERGEIST,:POWERUPPUNCH,:PSYCHIC,:PSYCHUP,:PSYWAVE,:RAGE,:RAINDANCE,:ROCKSMASH,:ROLEPLAY,:SCARYFACE,:SEISMICTOSS,:SELFDESTRUCT,:SHADOWBALL,:SHADOWCLAW,:SKILLSWAP,:SKITTERSMACK,:SKULLBASH,:SLUDGEBOMB,:SLUDGEWAVE,:SNATCH,:SPITE,:STRENGTH,:SUBMISSION,:SUCKERPUNCH,:SUNNYDAY,:TAKEDOWN,:TAUNT,:TELEKINESIS,:THIEF,:THUNDER,:THUNDERBOLT,:THUNDERPUNCH,:TORMENT,:TRICK,:TRICKROOM,:UPROAR,:VENOSHOCK,:WILLOWISP,:WONDERROOM,:ZAPCANNON,],
++		:compatiblemoves => [:ALLYSWITCH,:BIDE,:BODYSLAM,:BRICKBREAK,:CORROSIVEGAS,:COUNTER,:CURSE,:DARKPULSE,:DAZZLINGGLEAM,:DOUBLEEDGE,:DRAINPUNCH,:DREAMEATER,:DYNAMICPUNCH,:EMBARGO,:ENCORE,:ENERGYBALL,:EXPLOSION,:FIREPUNCH,:FLING,:FOCUSBLAST,:FOCUSPUNCH,:FOULPLAY,:GIGADRAIN,:GIGAIMPACT,:HEADBUTT,:HEX,:HYPERBEAM,:HYPNOSIS,:ICEPUNCH,:ICYWIND,:IMPRISON,:INFESTATION,:KNOCKOFF,:LASERFOCUS,:MEGADRAIN,:MEGAKICK,:MEGAPUNCH,:METRONOME,:MIMIC,:MOONGEISTBEAM,:NASTYPLOT,:NIGHTMARE,:NIGHTSHADE,:OMINOUSWIND,:PAINSPLIT,:PAYBACK,:PHANTOMFORCE,:POISONJAB,:POLTERGEIST,:POWERUPPUNCH,:PSYCHIC,:PSYCHUP,:PSYWAVE,:RAGE,:RAINDANCE,:ROCKSMASH,:ROLEPLAY,:SCARYFACE,:SEISMICTOSS,:SELFDESTRUCT,:SHADOWBALL,:SHADOWCLAW,:SKILLSWAP,:SKITTERSMACK,:SKULLBASH,:SLUDGEBOMB,:SLUDGEWAVE,:SNATCH,:SPITE,:STRENGTH,:SUBMISSION,:SUCKERPUNCH,:SUNNYDAY,:TAKEDOWN,:TAUNT,:TELEKINESIS,:THIEF,:THUNDER,:THUNDERBOLT,:THUNDERPUNCH,:TORMENT,:TRICK,:TRICKROOM,:UPROAR,:VENOSHOCK,:WILLOWISP,:WONDERROOM,:ZAPCANNON,],
+ 		:moveexceptions => [],
+ 		:Color => "Purple",
+ 		:Habitat => "Cave",
+@@ -31064,7 +31064,7 @@ MONHASH = {
+ 			[40,:SUNNYDAY],
+ 			[44,:ENDEAVOR],
+ 			[46,:SOLARBEAM]],
+-		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:GIGADRAIN,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:KNOCKOFF,:MISTYTERRAIN,:NATUREPOWER,:SAFEGUARD,:SEEDBOMB,:SOLARBEAM,:SUNNYDAY,:SWIFT,:TAILWIND,:TAUNT,],
++		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:GIGADRAIN,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:KNOCKOFF,:MISTYTERRAIN,:NATUREPOWER,:SAFEGUARD,:SEEDBOMB,:SOLARBEAM,:SUNNYDAY,:SWEETKISS,:SWIFT,:TAILWIND,:TAUNT,],
+ 		:moveexceptions => [],
+ 		:Color => "Green",
+ 		:EggGroups => [:Fairy, :Grass],
+@@ -31113,7 +31113,7 @@ MONHASH = {
+ 			[28,:TAILWIND],
+ 			[46,:HURRICANE],
+ 			[50,:MOONBLAST]],
+-		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:FLING,:GIGADRAIN,:GIGAIMPACT,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:HURRICANE,:HYPERBEAM,:KNOCKOFF,:LIGHTSCREEN,:MISTYTERRAIN,:NATUREPOWER,:PLAYROUGH,:PSYCHIC,:SAFEGUARD,:SEEDBOMB,:SHADOWBALL,:SOLARBEAM,:SUNNYDAY,:SWIFT,:TAILWIND,:TAUNT,:THIEF,:TRICKROOM,:UTURN,],
++		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:FLING,:GIGADRAIN,:GIGAIMPACT,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:HURRICANE,:HYPERBEAM,:KNOCKOFF,:LIGHTSCREEN,:MISTYTERRAIN,:NATUREPOWER,:PLAYROUGH,:PSYCHIC,:SAFEGUARD,:SEEDBOMB,:SHADOWBALL,:SOLARBEAM,:SUNNYDAY,:SWEETKISS,:SWIFT,:TAILWIND,:TAUNT,:THIEF,:TRICKROOM,:UTURN,],
+ 		:moveexceptions => [],
+ 		:Color => "Green",
+ 		:EggGroups => [:Fairy, :Grass],
 @@ -39796,6 +39796,9 @@ MONHASH = {
  		:BattlerPlayerY => 25,
  		:BattlerEnemyY => 19,

@@ -74,7 +74,7 @@ index 8e561a8..463896b 100644
  
        #Item/stall priority (all items overwrite stall priority)
 -      priorityarray[i][1] = -1 if @battlers[i].ability == :STALL 
-+      priorityarray[i][1] = -1 if @battlers[i].hasAbility?(:STALL) 
++      priorityarray[i][1] = -1 if @battlers[i].hasAbility?(:STALL)
        if !ignorequickclaw && @choices[i][0] == 1 # Is a move
 -        if (@battlers[i].ability == :QUICKDRAW && (pbRandom(100)<30))
 +        if (@battlers[i].hasAbility?(:QUICKDRAW) && (pbRandom(100)<30))
