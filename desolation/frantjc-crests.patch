@@ -1,3 +1,23 @@
+diff --git a/Battle_Move.rb b/Battle_Move.rb
+index 911f05e..56f7aed 100644
+--- a/Battle_Move.rb
++++ b/Battle_Move.rb
+@@ -1280,8 +1280,14 @@ class PokeBattle_Move
+     stagediv=[8,7,6,5,4,3,2,2,2,2,2,2,2]
+     type=pbType(attacker)
+     ##### Calcuate base power of move #####
+-   
++
+     basemult=1.0
++    if attacker.crested && attacker.species = :WHIMSICOTT && (PBStuff::BULLETMOVE).include?(@move)
++      basemult*=1.4
++    elsif attacker.crested && attacker.species = :INTELEON
++      basemult+=0.4*@priority
++    end
++
+     #classic prep stuff
+     attitemworks = attacker.itemWorks?(true)
+     oppitemworks = opponent.itemWorks?(true)
 diff --git a/Battler.rb b/Battler.rb
 index b75988f..190256b 100644
 --- a/Battler.rb
@@ -20,14 +40,14 @@ index b75988f..190256b 100644
        for i in @battle.battlers
          if i.userSwitch
 diff --git a/DataObjects - Yeeters.rb b/DataObjects - Yeeters.rb
-index 9a64652..a05b5a2 100644
+index 9a64652..c52e2ff 100644
 --- a/DataObjects - Yeeters.rb	
 +++ b/DataObjects - Yeeters.rb	
 @@ -149,6 +149,7 @@ def itemDump
      # crest = [864]
      # or
      # crest = (864..865).to_a
-+    crest = (864..872).to_a
++    crest = (864..873).to_a
    end
    exporttext = "ITEMHASH = {\n"
    for item in $cache.items
@@ -35,7 +55,7 @@ index 9a64652..a05b5a2 100644
      # crest = [864]
      # or
      # crest = (864..865).to_a
-+    crest = (864..872).to_a
++    crest = (864..873).to_a
      exclusions = [49]
      memory = (655..670).to_a
      mint = (781..801).to_a
@@ -52,7 +72,7 @@ index 45b1509..2828ad0 100644
    d= pbGetEvolvedFormData(pokemon.species,pokemon)
    if !d.nil?
 diff --git a/PBStuff.rb b/PBStuff.rb
-index ddb8060..5aba216 100644
+index ddb8060..d6f1c60 100644
 --- a/PBStuff.rb
 +++ b/PBStuff.rb
 @@ -460,6 +460,11 @@ POKEMONTOCREST = {
@@ -63,7 +83,7 @@ index ddb8060..5aba216 100644
 +  :VICTINI => :VICREST,               :JUMPLUFF => :JUMPCREST,
 +  :CHATOT => :CHATCREST,              :MARACTUS => :MARACREST,
 +  :VIGOROTH => :VIGCREST,             :WHIMSICOTT => :WHIMSICREST,
-+  :GENGAR => :GENGCREST,
++  :GENGAR => :GENGCREST,              :INTELEON => :INTELECREST,
  }
  
  SILVALLYCRESTABILITIES = {
@@ -96,15 +116,16 @@ index 119adf7..f6d8f21 100644
    end
  end
 diff --git a/Pokemon Desolation/DesoPokeBattle_Battler.rb b/Pokemon Desolation/DesoPokeBattle_Battler.rb
-index 0586e6e..e11d7be 100644
+index 0586e6e..6f452ae 100644
 --- a/Pokemon Desolation/DesoPokeBattle_Battler.rb	
 +++ b/Pokemon Desolation/DesoPokeBattle_Battler.rb	
-@@ -15,6 +15,21 @@ class PokeBattle_Battler
+@@ -15,6 +15,20 @@ class PokeBattle_Battler
  
    def crestStats
      case @crested
 +    when :GENGAR
-+      @abilities = [:MISTYSURGE]
++      @abilities = [:LEVITATE, :MISTYSURGE]
++      @type2 = :FAIRY
 +    when :STARMIE
 +      @abilities = [:PSYCHICSURGE]
 +    when :ARCHEOPS
@@ -116,16 +137,14 @@ index 0586e6e..e11d7be 100644
 +    when :VIGOROTH
 +      @abilities = [:GORILLATACTICS]
 +      @spdef, @defense = @spdef * 1.5, @defense * 1.5
-+    when :WHIMSICOTT
-+      # TODO.
      end
    end
  end
 diff --git a/Pokemon Desolation/itemtext.rb b/Pokemon Desolation/itemtext.rb
-index e9bd67c..9aeb22b 100644
+index e9bd67c..df8a78d 100644
 --- a/Pokemon Desolation/itemtext.rb	
 +++ b/Pokemon Desolation/itemtext.rb	
-@@ -7761,4 +7761,85 @@ ITEMHASH = {
+@@ -7761,4 +7761,94 @@ ITEMHASH = {
  # 	:noUseInBattle => true,
  # 	:noUse => true,
  # },
@@ -195,7 +214,7 @@ index e9bd67c..9aeb22b 100644
 +:WHIMSICREST => {
 +	:ID => 871,
 +	:name => "Whimsicott Crest",
-+	:desc => "TODO.",
++	:desc => "Grants Bombardier.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
@@ -204,7 +223,16 @@ index e9bd67c..9aeb22b 100644
 +:GENGCREST => {
 +	:ID => 872,
 +	:name => "Gengar Crest",
-+	:desc => "Grants Misty Surge.",
++	:desc => "Grants Misty Surge, Levitate, and a Fairy sub-type.",
++	:price => 0,
++	:crest => true,
++	:noUseInBattle => true,
++	:noUse => true,
++},
++:INTELECREST => {
++	:ID => 873,
++	:name => "Inteleon Crest",
++	:desc => "Grants Acceleration.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
