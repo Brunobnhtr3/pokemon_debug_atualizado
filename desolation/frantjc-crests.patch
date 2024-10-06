@@ -1,5 +1,5 @@
 diff --git a/Battle_Move.rb b/Battle_Move.rb
-index 911f05e..56f7aed 100644
+index bb5ad81..ff7eb03 100644
 --- a/Battle_Move.rb
 +++ b/Battle_Move.rb
 @@ -1280,8 +1280,14 @@ class PokeBattle_Move
@@ -10,7 +10,7 @@ index 911f05e..56f7aed 100644
 +
      basemult=1.0
 +    if attacker.crested && attacker.species = :WHIMSICOTT && (PBStuff::BULLETMOVE).include?(@move)
-+      basemult*=1.4
++      basemult*=1.2
 +    elsif attacker.crested && attacker.species = :INTELEON
 +      basemult+=0.4*@priority
 +    end
@@ -19,18 +19,18 @@ index 911f05e..56f7aed 100644
      attitemworks = attacker.itemWorks?(true)
      oppitemworks = opponent.itemWorks?(true)
 diff --git a/Battler.rb b/Battler.rb
-index b75988f..190256b 100644
+index d1a2cab..02041e8 100644
 --- a/Battler.rb
 +++ b/Battler.rb
-@@ -5574,6 +5574,16 @@ class PokeBattle_Battler
+@@ -5569,6 +5569,16 @@ class PokeBattle_Battler
            user.effects[:Outrage]=0
          end
        end
 +
 +      if user.species == :VICTINI && user.crested && basemove.move == :VCREATE && ((@battle.pbCanChooseNonActive?(self.index) && !@battle.pbAllFainted?(@battle.pbParty(self.index))) || @battle.pbIsWild?)
 +        if @battle.pbIsWild?
-+          return if @battle.cantescape || $game_switches[:Never_Escape]
-+          @battle.decision=3 # Set decision to escaped
++            return if @battle.cantescape || $game_switches[:Never_Escape]
++            @battle.decision=3 # Set decision to escaped
 +        else
 +          self.userSwitch = true
 +        end
@@ -116,7 +116,7 @@ index 119adf7..f6d8f21 100644
    end
  end
 diff --git a/Pokemon Desolation/DesoPokeBattle_Battler.rb b/Pokemon Desolation/DesoPokeBattle_Battler.rb
-index 0586e6e..6f452ae 100644
+index 0586e6e..1d4fc78 100644
 --- a/Pokemon Desolation/DesoPokeBattle_Battler.rb	
 +++ b/Pokemon Desolation/DesoPokeBattle_Battler.rb	
 @@ -15,6 +15,20 @@ class PokeBattle_Battler
@@ -124,24 +124,24 @@ index 0586e6e..6f452ae 100644
    def crestStats
      case @crested
 +    when :GENGAR
-+      @abilities = [:LEVITATE, :MISTYSURGE]
++      @ability = :MISTYSURGE
 +      @type2 = :FAIRY
 +    when :STARMIE
-+      @abilities = [:PSYCHICSURGE]
++      @ability = :PSYCHICSURGE
 +    when :ARCHEOPS
 +      @ability = :DEFIANT
 +    when :CHATOT
-+      @abilities = [:PUNKROCK, :OVERCOAT]
++      @ability = :PUNKROCK
 +    when :MARACTUS
-+      @abilities = [:DRYSKIN, :SANDRUSH]
++      @ability = :SANDRUSH
 +    when :VIGOROTH
-+      @abilities = [:GORILLATACTICS]
++      @ability = :GORILLATACTICS
 +      @spdef, @defense = @spdef * 1.5, @defense * 1.5
      end
    end
  end
 diff --git a/Pokemon Desolation/itemtext.rb b/Pokemon Desolation/itemtext.rb
-index e9bd67c..df8a78d 100644
+index e9bd67c..e1fd911 100644
 --- a/Pokemon Desolation/itemtext.rb	
 +++ b/Pokemon Desolation/itemtext.rb	
 @@ -7761,4 +7761,94 @@ ITEMHASH = {
@@ -160,7 +160,7 @@ index e9bd67c..df8a78d 100644
 +:ARCHCREST => {
 +	:ID => 865,
 +	:name => "Archeops Crest",
-+	:desc => "Removes Defeatest and grants Defiant. Upon switching in, opponent Intimidates.",
++	:desc => "Grants Defiant. Upon switching in, opponent Intimidates.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
@@ -187,7 +187,7 @@ index e9bd67c..df8a78d 100644
 +:CHATCREST => {
 +	:ID => 868,
 +	:name => "Chatot Crest",
-+	:desc => "Grants Punk Rock and Overcoat.",
++	:desc => "Grants Punk Rock.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
@@ -196,7 +196,7 @@ index e9bd67c..df8a78d 100644
 +:MARACREST => {
 +	:ID => 869,
 +	:name => "Maractus Crest",
-+	:desc => "Grants Dry Skin and Sand Rush.",
++	:desc => "Grants Sand Rush.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
@@ -223,7 +223,7 @@ index e9bd67c..df8a78d 100644
 +:GENGCREST => {
 +	:ID => 872,
 +	:name => "Gengar Crest",
-+	:desc => "Grants Misty Surge, Levitate, and a Fairy sub-type.",
++	:desc => "Grants Misty Surge and a Fairy sub-type.",
 +	:price => 0,
 +	:crest => true,
 +	:noUseInBattle => true,
@@ -240,7 +240,7 @@ index e9bd67c..df8a78d 100644
 +},
  }
 diff --git a/Pokemon Desolation/montext.rb b/Pokemon Desolation/montext.rb
-index ef4557a..d14f105 100644
+index ef4557a..b775378 100644
 --- a/Pokemon Desolation/montext.rb	
 +++ b/Pokemon Desolation/montext.rb	
 @@ -5882,7 +5882,7 @@ MONHASH = {
@@ -252,31 +252,3 @@ index ef4557a..d14f105 100644
  		:moveexceptions => [],
  		:Color => "Purple",
  		:Habitat => "Cave",
-@@ -31064,7 +31064,7 @@ MONHASH = {
- 			[40,:SUNNYDAY],
- 			[44,:ENDEAVOR],
- 			[46,:SOLARBEAM]],
--		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:GIGADRAIN,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:KNOCKOFF,:MISTYTERRAIN,:NATUREPOWER,:SAFEGUARD,:SEEDBOMB,:SOLARBEAM,:SUNNYDAY,:SWIFT,:TAILWIND,:TAUNT,],
-+		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:GIGADRAIN,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:KNOCKOFF,:MISTYTERRAIN,:NATUREPOWER,:SAFEGUARD,:SEEDBOMB,:SOLARBEAM,:SUNNYDAY,:SWEETKISS,:SWIFT,:TAILWIND,:TAUNT,],
- 		:moveexceptions => [],
- 		:Color => "Green",
- 		:EggGroups => [:Fairy, :Grass],
-@@ -31113,7 +31113,7 @@ MONHASH = {
- 			[28,:TAILWIND],
- 			[46,:HURRICANE],
- 			[50,:MOONBLAST]],
--		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:FLING,:GIGADRAIN,:GIGAIMPACT,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:HURRICANE,:HYPERBEAM,:KNOCKOFF,:LIGHTSCREEN,:MISTYTERRAIN,:NATUREPOWER,:PLAYROUGH,:PSYCHIC,:SAFEGUARD,:SEEDBOMB,:SHADOWBALL,:SOLARBEAM,:SUNNYDAY,:SWIFT,:TAILWIND,:TAUNT,:THIEF,:TRICKROOM,:UTURN,],
-+		:compatiblemoves => [:BEATUP,:CHARM,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:ENERGYBALL,:FAKETEARS,:FLASH,:FLING,:GIGADRAIN,:GIGAIMPACT,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:HURRICANE,:HYPERBEAM,:KNOCKOFF,:LIGHTSCREEN,:MISTYTERRAIN,:NATUREPOWER,:PLAYROUGH,:PSYCHIC,:SAFEGUARD,:SEEDBOMB,:SHADOWBALL,:SOLARBEAM,:SUNNYDAY,:SWEETKISS,:SWIFT,:TAILWIND,:TAUNT,:THIEF,:TRICKROOM,:UTURN,],
- 		:moveexceptions => [],
- 		:Color => "Green",
- 		:EggGroups => [:Fairy, :Grass],
-@@ -39796,6 +39796,9 @@ MONHASH = {
- 		:BattlerPlayerY => 25,
- 		:BattlerEnemyY => 19,
- 		:BattlerAltitude => 11,
-+		:evolutions => [
-+			[:DIANCIE,:LevelDay,36]
-+		]
- 	},
- 
- 	:OnCreation => {},
