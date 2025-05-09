@@ -9,9 +9,11 @@ clean:
 ifeq ($(V1),)
 
 FPK ?= Data/Data_0.fpk
+
 else
 
 FPK ?= Source/Main/A_0.fpk
+
 .PHONY: pokemon-debug-menu
 pokemon-debug-menu:
 	@cd tmp/Data/Scripts && (git init && git add . && git commit --message init || true) && git apply ../../../$@.patch && git commit --message $@ && cd -
