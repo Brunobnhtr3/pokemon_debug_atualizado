@@ -1,5 +1,3 @@
-include ../lib.mk
-
 WD = $(CURDIR)/tmp
 
 PYTHON = python
@@ -23,7 +21,7 @@ decompile: decompile-scripts
 
 .PHONY: pokemon-debug-menu
 pokemon-debug-menu:
-	@cd tmp && (git init && git add . && git commit --message init || true) && git apply ../$@.patch && git commit --message $@ && cd ..
+	@cd tmp && (git init && git add . && git commit --message init || true) && git apply ../$@.patch && git commit --message $@ && cd -
 
 .PHONY: compile-scripts
 compile-scripts: check-pokemon-xenoverse

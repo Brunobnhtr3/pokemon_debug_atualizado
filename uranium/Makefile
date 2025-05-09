@@ -1,31 +1,29 @@
-include ../lib.mk
-
 WD = $(CURDIR)/tmp
 
 .PHONY: clean
 clean:
 	@rm -rf $(WD)
-	@cd unpackd && git checkout . && cd ..
+	@cd unpackd && git checkout . && cd -
 
 .PHONY: rgssad
 rgssad:
-	@git submodule update --force
+	@git submodule update --remote
 
 .PHONY: unpackd
 unpackd: rgssad
-	@cd $@ && bundle install && cd ..
-	@cd $@ && git apply ../unpackd.patch && cd ..
+	@cd $@ && bundle install && cd -
+	@cd $@ && git apply ../unpackd.patch && cd -
 
 .PHONY: decompile-rgssad
 decompile-rgssad: rgssad check-pokemon-uranium
 	@rm -rf $(WD)
-	@cd rgssad && cargo run unpack $(POKEMON_URANIUM)/Uranium.rgssad $(WD) && cd ..
+	@cd rgssad && cargo run unpack $(POKEMON_URANIUM)/Uranium.rgssad $(WD) && cd -
 
 .PHONY: decompile-scripts
 decompile-scripts: unpackd
 	@echo "RPGXP 1.02" > $(WD)/Game.rxproj
-	@cd unpackd && bundle install && cd ..
-	@cd unpackd && bundle exec unpackd --extract --project $(WD) --files scripts && cd ..
+	@cd unpackd && bundle install && cd -
+	@cd unpackd && bundle exec unpackd --extract --project $(WD) --files scripts && cd -
 
 .PHONY: decompile
 decompile: decompile-rgssad decompile-scripts
@@ -36,11 +34,11 @@ pokemon-debug-menu:
 
 .PHONY: compile-rgssad
 compile-rgssad: rgssad check-pokemon-uranium
-	@cd rgssad && cargo run pack $(WD) $(POKEMON_URANIUM)/Uranium.rgssad && cd ..
+	@cd rgssad && cargo run pack $(WD) $(POKEMON_URANIUM)/Uranium.rgssad && cd -
 
 .PHONY: compile-scripts
 compile-scripts: unpackd
-	@cd unpackd && bundle exec unpackd --combine --project $(WD) --files scripts && cd ..
+	@cd unpackd && bundle exec unpackd --combine --project $(WD) --files scripts && cd -
 	@rm -rf $(WD)/Game.rxproj $(WD)/Data/Backup $(WD)/Data/Scripts $(WD)/Data/YAML
 
 .PHONY: compile
